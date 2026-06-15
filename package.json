@@ -1,0 +1,61 @@
+{
+  "name": "@humanmenu/mcp",
+  "version": "0.1.0",
+  "description": "Local MCP server for human.menu with non-custodial x402 payments via agent-pay.",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "x402",
+    "ai-agents",
+    "human-in-the-loop",
+    "payments"
+  ],
+  "homepage": "https://github.com/humanmenu/mcp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/humanmenu/mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/humanmenu/mcp/issues"
+  },
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "human-menu-mcp": "bin/human-menu-mcp"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "bin",
+    "dist",
+    "scripts/smoke.mjs",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node scripts/selftest.mjs && node scripts/integration.mjs && node scripts/protocol-stdout.mjs && node scripts/cli-test.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.4.0"
+  }
+}

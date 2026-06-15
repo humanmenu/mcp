@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+const command = process.argv[2];
+if (command === "doctor" || command === "register" || command === "--help" || command === "-h") {
+  const { runCli } = await import("../dist/cli.js");
+  await runCli(process.argv.slice(2));
+} else {
+  await import("../dist/index.js");
+}
