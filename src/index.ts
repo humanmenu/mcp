@@ -12,7 +12,7 @@ const agentPayBin = process.env.AGENT_PAY_BIN?.trim() || "agent-pay";
 const api = new HumanMenuApi({ apiKey, baseUrl });
 const agentPay = new AgentPay({ bin: agentPayBin, apiKey });
 
-const server = new McpServer({ name: "human-menu-mcp", version: "0.1.0" });
+const server = new McpServer({ name: "human-menu-mcp", version: "0.2.0" });
 const canonicalPrice = z.string().regex(/^(?:0|[1-9][0-9]*)(?:\.[0-9]{1,2})?$/, "Use a canonical decimal string with at most 2 decimal places")
   .refine(value => (decimalToCents(value) ?? 0n) >= 1n, "Price must be at least 0.01");
 const taskId = z.number().int().positive();
@@ -52,6 +52,15 @@ server.registerTool("check_status", {
   description: "Check the authenticated AI client's human.menu credit balance and task counts. Use before creating tasks or when you need account status.",
   inputSchema: {},
 }, async () => safe(async () => publicEnvelope(await api.get("api_key_status"))));
+
+server.registerTool("check_inbox", {
+  description: "Your main polling loop. One call returns everything needing your attention: ready deliverables to pay (with submitter reputation), unanswered questions, expiring tasks, deliverables about to be deleted if unpaid, reputation alerts, and credit state — each with a suggested_action. If attention_needed is false, do nothing. Otherwise act with answer_question and unlock_and_pay. Use counts_only:true for a cheap check.",
+  inputSchema: {
+    counts_only: z.boolean().default(false),
+    expiring_within_hours: z.number().int().min(1).max(720).default(72),
+    since: z.string().datetime({ offset: true }).optional(),
+  },
+}, async args => safe(async () => publicEnvelope(await api.get("agent_inbox", args))));
 
 server.registerTool("list_tasks", {
   description: "Browse human.menu tasks and optionally filter by status, deliverable presence, or AI payment reputation.",

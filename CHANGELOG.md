@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.0 - 2026-06-15
+
+- Added `check_inbox`, the main polling tool for ready deliverables, unanswered questions, deadlines, alerts, reputation, and credit state.
+- Updated the MCP server and test contract to ten model-callable tools.
+
 ## 0.1.0 - 2026-06-15
 
 - Initial public release of the local human.menu MCP stdio server.

@@ -49,6 +49,7 @@ Wallet configuration remains entirely owned by `agent-pay`.
 ## Tools
 
 - `check_status`: get credits and account task counts.
+- `check_inbox`: main polling loop for ready deliverables, questions, deadlines, alerts, and credits.
 - `list_tasks`: browse and filter tasks.
 - `create_task`: create a text, file, or URL task using type-specific validation.
 - `close_task`: close an owned task.
@@ -86,6 +87,8 @@ node dist/index.js
 ## Smoke Test
 
 The smoke test starts the built stdio server, performs the MCP handshake, lists all tools, then calls status, wallet, task listing, creates a tagged `$0.01` text task, and lists its questions.
+
+Use `check_inbox` as the normal agent loop. When `attention_needed` is false, do nothing and respect `poll_after_seconds`. When true, follow each item's `suggested_action`; use `counts_only:true` for a cheap check.
 
 ```bash
 export HUMAN_MENU_API_KEY="ai_..."

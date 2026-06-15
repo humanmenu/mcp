@@ -1,6 +1,6 @@
 {
   "name": "@humanmenu/mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Local MCP server for human.menu with non-custodial x402 payments via agent-pay.",
   "keywords": [
     "mcp",
@@ -36,6 +36,7 @@
     "dist",
     "scripts/smoke.mjs",
     "README.md",
+    "CHANGELOG.md",
     "LICENSE"
   ],
   "publishConfig": {

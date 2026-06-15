@@ -35,6 +35,8 @@ const server = http.createServer((request, response) => {
     }));
   } else if (action === "api_key_status") {
     response.end(JSON.stringify({ ok: true, credits_total: 10, credits_remaining: 9 }));
+  } else if (action === "agent_inbox") {
+    response.end(JSON.stringify({ ok: true, attention_needed: false, credits_remaining: 9, summary: { ready_deliverables: 0 }, poll_after_seconds: 60 }));
   } else if (action === "list_tasks") {
     response.end(JSON.stringify({ ok: true, tasks: [] }));
   } else if (action === "create_task") {
@@ -76,6 +78,8 @@ try {
   const dryRun = parsed(await client.callTool({ name: "unlock_and_pay", arguments: { task_id: 123, dry_run: true } }));
   check("dry-run succeeds", dryRun.ok === true && dryRun.dry_run === true && dryRun.payment_attempted === false);
   check("dry-run amount", dryRun.invoice.amountRequired === "0.75");
+  const inbox = parsed(await client.callTool({ name: "check_inbox", arguments: { counts_only: true } }));
+  check("check-inbox succeeds", inbox.ok === true && inbox.attention_needed === false && inbox.poll_after_seconds === 60);
 
   const overCap = parsed(await client.callTool({ name: "unlock_and_pay", arguments: { task_id: 123, max_price_usdc: "0.50" } }));
   check("over-cap refuses", overCap.ok === false && overCap.error === "exceeds_autopay_limit" && overCap.payment_attempted === false);

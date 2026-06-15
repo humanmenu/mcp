@@ -39,7 +39,7 @@ try {
   await client.connect(transport);
 
   const tools = await client.listTools();
-  const expected = ["check_status", "list_tasks", "create_task", "close_task", "get_deliverable_meta", "list_questions", "answer_question", "wallet_status", "unlock_and_pay"];
+  const expected = ["check_status", "check_inbox", "list_tasks", "create_task", "close_task", "get_deliverable_meta", "list_questions", "answer_question", "wallet_status", "unlock_and_pay"];
   const toolNames = tools.tools.map(tool => tool.name);
   const toolsPassed = expected.every(name => toolNames.includes(name)) && toolNames.length === expected.length;
   results.push({ name: "tools/list", required: true, passed: toolsPassed, result: { ok: toolsPassed, tools: toolNames } });
